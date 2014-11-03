@@ -25,6 +25,7 @@ $(function(){
                     $('.set').slideDown();
                     $.jStorage.deleteKey('thing_title');
                     $.jStorage.deleteKey('thing_deadline');
+                    $.jStorage.deleteKey('thing_addtime');
                     
                     if($('.dead-remain').html() != 'Time\'s up and you\' re dead!'){
                         $.jStorage.set('life',$.jStorage.get('life')+1);
@@ -37,6 +38,7 @@ $(function(){
             if(time && thing){
                 $.jStorage.set('thing_title',thing);
                 $.jStorage.set('thing_deadline',transdate(time));
+                $.jStorage.set('thing_addtime',Date.parse(new Date())/1000);
                 $('.set').slideUp();
                 init();
             }else{
@@ -75,6 +77,7 @@ function init(){
     dead.title = $.jStorage.get('thing_title');
     dead.date = transUnix($.jStorage.get('thing_deadline'));
     dead.remain = $.jStorage.get('thing_deadline') - Date.parse(new Date())/1000;
+
     var remain = friendlyTime(dead.remain);
 
     if(dead.title){
@@ -123,9 +126,15 @@ function friendlyTime(remain){
 function updateTime() {
     if($.jStorage.get('thing_deadline')){
         var remain = $.jStorage.get('thing_deadline') - Date.parse(new Date())/1000;
-        if( remain >= 0){
+        var total = $.jStorage.get('thing_deadline') - $.jStorage.get('thing_addtime');
+        var percent = (remain / total) * 100 ;
+            percent = percent.toString() + '%';
+        if( remain >= 0){            
             remain = friendlyTime(remain);
             $('.dead-remain').html(remain);
+            $('.progress').animate({
+                width:percent
+            })
             console.log('Time update!'+($.jStorage.get('thing_deadline') - Date.parse(new Date())/1000));
             setTimeout(function(){
                 updateTime();
@@ -133,6 +142,9 @@ function updateTime() {
         }else{
             $('.dead-remain').html('Time\'s up and you\' re dead!');
             $.jStorage.set('death',death+1);
+            $('.progress').animate({
+                width:percent
+            })
         }
         
     }
