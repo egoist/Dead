@@ -40,7 +40,7 @@ $(function(){
                 $('.set').slideUp();
                 init();
             }else{
-                swal({   title: "Error!",   text: "You haven't added a task yet.",   timer: 5000 });
+                swal({   title: "Error!", type: "info",  text: "You haven't added a task yet.",   timer: 5000 });
             }
         }
         
