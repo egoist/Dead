@@ -9,7 +9,7 @@ $(function(){
         if($.jStorage.get('thing_title')){
             swal({
                 title: "Are you sure?",
-                text: "You will lost this task if you've click yes!",
+                text: "You will lose this task if you've click yes!",
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#DD6B55",
@@ -39,6 +39,8 @@ $(function(){
                 $.jStorage.set('thing_deadline',transdate(time));
                 $('.set').slideUp();
                 init();
+            }else{
+                swal({   title: "Error!",   text: "You haven't added a task yet.",   timer: 5000 });
             }
         }
         
