@@ -79,8 +79,11 @@ function friendlyTime(remain){
         var $m_seconds = $seconds - $minutes * 60;
     var $hours   = Math.floor( $seconds / 3600 );
         var $h_minutes = $minutes - $hours * 60;
+        var $h_seconds = $seconds - $hours * 60 * 60 - $h_minutes * 60;
     var $day     = Math.floor( $seconds / 86400 );
         var $d_hours = $hours - $day * 24;
+        var $d_minutes = $minutes - $day * 24 * 60 - $d_hours * 60;
+        var $d_seconds = $seconds - $day * 24 * 60 * 60 - $d_hours * 60 * 60 - $d_minutes * 60;
     if( $seconds == 0 ){
         return 'Time up!';
     }
@@ -91,10 +94,10 @@ function friendlyTime(remain){
         return $minutes + ' Minutes ' + $m_seconds + ' Seconds remain';
     }
     if( ( $hours >= 0 ) && ( $hours <= 24 ) ){
-        return $hours + ' Hours ' + $h_minutes +' Minutes remain';
+        return $hours + ' Hours ' + $h_minutes +' Minutes ' + $h_seconds + ' Seconds remain';
     }
     if( ( $day >= 1 ) ){
-        return $day + ' Days ' + $d_hours + ' Hours remain';
+        return $day + ' Days ' + $d_hours + ' Hours ' + $d_minutes + ' Minutes ' + $d_seconds + ' Seconds remain';
     }
     
     
