@@ -7,15 +7,30 @@ $(function(){
 
      $('#start').click(function(){
         if($.jStorage.get('thing_title')){
-            $('.dead').slideUp();
-            $('#start').html('Start!')
-            $('.set').slideDown();
-            $.jStorage.deleteKey('thing_title');
-            $.jStorage.deleteKey('thing_deadline');
-            
-            if($('.dead-remain').html() != 'Time\'s up and you\' re dead!'){
-                $.jStorage.set('life',$.jStorage.get('life')+1);
-            }
+            swal({
+                title: "Are you sure?",
+                text: "You will lost this task if you've click yes!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, all done!",
+                cancelButtonText: "No, hand shaked!",
+                closeOnConfirm: true,
+                closeOnCancel: true
+            },
+            function(isConfirm) {
+                if (isConfirm) {
+                    $('.dead').slideUp();
+                    $('#start').html('Start!')
+                    $('.set').slideDown();
+                    $.jStorage.deleteKey('thing_title');
+                    $.jStorage.deleteKey('thing_deadline');
+                    
+                    if($('.dead-remain').html() != 'Time\'s up and you\' re dead!'){
+                        $.jStorage.set('life',$.jStorage.get('life')+1);
+                    }
+                } 
+            });
         }else{
             var thing = $('#thing').val();
             var time = $('#time').val();
