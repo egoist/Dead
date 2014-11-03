@@ -1,3 +1,5 @@
+var death = $.jStorage.get('death');
+var life = $.jStorage.get('life');
 $(function(){
      init();
 
@@ -5,18 +7,22 @@ $(function(){
 
      $('#start').click(function(){
         if($.jStorage.get('thing_title')){
-            $('.dead').slideUp().remove();
+            $('.dead').slideUp();
             $('#start').html('Start!')
             $('.set').slideDown();
             $.jStorage.deleteKey('thing_title');
             $.jStorage.deleteKey('thing_deadline');
+            
+            if($('.dead-remain').html() != 'Time\'s up and you\' re dead!'){
+                $.jStorage.set('life',$.jStorage.get('life')+1);
+            }
         }else{
             var thing = $('#thing').val();
             var time = $('#time').val();
             if(time && thing){
                 $.jStorage.set('thing_title',thing);
                 $.jStorage.set('thing_deadline',transdate(time));
-                $('.set').slideUp().remove();
+                $('.set').slideUp();
                 init();
             }
         }
@@ -42,6 +48,12 @@ function transUnix(tm){
 }
 
 function init(){
+    if(!death){
+        $.jStorage.set('death',0);
+    }
+    if(!life){
+        $.jStorage.set('life',0);
+    }
     var dead = new Object();
     dead.title = $.jStorage.get('thing_title');
     dead.date = transUnix($.jStorage.get('thing_deadline'));
@@ -91,12 +103,18 @@ function friendlyTime(remain){
 function updateTime() {
     if($.jStorage.get('thing_deadline')){
         var remain = $.jStorage.get('thing_deadline') - Date.parse(new Date())/1000;
-        remain = friendlyTime(remain);
-        $('.dead-remain').html(remain);
-        console.log('Time update!');
-        setTimeout(function(){
-            updateTime();
-        },1000)
+        if( remain >= 0){
+            remain = friendlyTime(remain);
+            $('.dead-remain').html(remain);
+            console.log('Time update!'+($.jStorage.get('thing_deadline') - Date.parse(new Date())/1000));
+            setTimeout(function(){
+                updateTime();
+            },1000)
+        }else{
+            $('.dead-remain').html('Time\'s up and you\' re dead!');
+            $.jStorage.set('death',death+1);
+        }
+        
     }
     
 }
