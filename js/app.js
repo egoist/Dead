@@ -9,7 +9,7 @@ $(function(){
         if($.jStorage.get('thing_title')){
             swal({
                 title: "Are you sure?",
-                text: "You will lose this task if you've click yes!",
+                text: "You will lose this task if you click yes!",
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#DD6B55",
